@@ -1,5 +1,6 @@
-from youtube_transcript_api import YouTubeTranscriptApi
 import pandas as pd
+from youtube_transcript_api import YouTubeTranscriptApi
+
 
 def get_transcript(video_id):
     ytt_api = YouTubeTranscriptApi()
@@ -82,8 +83,8 @@ print("Sample of the mathematical representation of the first chunk:")
 # Print the non-zero values of the first chunk
 print(X_features[0])
 
-from sklearn.linear_model import SGDClassifier
 import numpy as np
+from sklearn.linear_model import SGDClassifier
 
 # 1. Extract the labels from our generated dataset
 # y_labels is a list of 1s and 0s matching the X_features matrix
@@ -178,7 +179,7 @@ joblib.dump(classifier, "classifier.joblib", compress=3)
 joblib.dump(smoother, "smoother.joblib", compress=3)
 
 print("\n--- Pipeline Exported Successfully ---")
-print(f"Vectorizer size on disk: ~10 KB")
-print(f"SGDClassifier size on disk: ~40 KB")
-print(f"HMM Smoother size on disk: ~5 KB")
+print("Vectorizer size on disk: ~10 KB")
+print("SGDClassifier size on disk: ~40 KB")
+print("HMM Smoother size on disk: ~5 KB")
 print("Total model footprint: < 60 KB (Well under your 500 KB budget)")

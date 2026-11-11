@@ -1,10 +1,10 @@
-import requests
-import json
-from youtube_transcript_api import YouTubeTranscriptApi
+import joblib
 import pandas as pd
+import requests
 from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.linear_model import SGDClassifier
-import joblib
+from youtube_transcript_api import YouTubeTranscriptApi
+
 
 def fetch_real_sponsor_data(video_ids):
     all_dataset_rows = []
@@ -31,7 +31,7 @@ def fetch_real_sponsor_data(video_ids):
         try:
             ytt_api = YouTubeTranscriptApi()
             transcript = ytt_api.fetch(vid).to_raw_data()
-        except Exception:
+        except Exception:  # noqa: BLE001, S112
             # If transcript fails or video is unavailable, skip
             continue
 
@@ -92,7 +92,6 @@ if len(master_dataset) > 0:
 else:
     print("No valid data collected. Check video IDs or network connection.")
     
-import joblib
 
 # Save the newly trained real-data artifacts
 joblib.dump(vectorizer, "vectorizer.joblib", compress=3)
