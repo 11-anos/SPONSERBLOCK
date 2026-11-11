@@ -1,8 +1,14 @@
-import joblib
 import time
+
+import joblib
 import requests
 from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api._errors import TranscriptsDisabled, IpBlocked, RequestBlocked
+from youtube_transcript_api._errors import (
+    IpBlocked,
+    RequestBlocked,
+    TranscriptsDisabled,
+)
+
 
 def load_inference_artifacts():
     print("Loading lightweight model artifacts...")
@@ -18,9 +24,9 @@ def fetch_live_transcript(video_id):
                 # Fetch transcript using the current API and convert its objects to dictionaries.
                 fetched_data = YouTubeTranscriptApi().fetch(video_id).to_raw_data()
                 break
-            except requests.exceptions.SSLError as error:
+            except requests.exceptions.SSLError:
                 if attempt == 2:
-                    raise error
+                    raise
                 print(f"[!] TLS connection failed; retrying ({attempt + 1}/2)...")
                 time.sleep(2 ** attempt)
 
@@ -44,7 +50,7 @@ def fetch_live_transcript(video_id):
         print("Check your network, proxy/VPN, system clock, and CA certificates.")
         print("Do not disable SSL verification; that makes the connection insecure.")
         return []
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"\n[!] Transcript request failed: {e}")
         return []
 
@@ -90,11 +96,14 @@ def detect_sponsors_in_live_video(video_id, threshold=0.3):
         
     return sponsor_segments
 
+def dropSegmentsBelowDuration(segments, min_duration=5.0):
+    return [seg for seg in segments if seg['end'] - seg['start'] >= min_duration]
+
 if __name__ == "__main__":
     # Test with a valid live video ID (e.g., Linus Tech Tips video ID)
-    test_video_id = "SChh6MnYzjU" 
+    test_video_id = "IX2NQ1lq4ZM" 
     
-    detected_intervals = detect_sponsors_in_live_video(test_video_id, threshold=0.3)
+    detected_intervals = dropSegmentsBelowDuration(detect_sponsors_in_live_video(test_video_id, threshold=0.7), min_duration=4.0)
     
     print("\n--- Live Detection Results ---")
     if detected_intervals:
