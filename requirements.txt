@@ -1,0 +1,12 @@
+# Core data handling and numerical processing
+numpy
+pandas
+
+# Machine learning and sequence modeling
+scikit-learn
+joblib
+hmmlearn
+
+# APIs and web scraping
+requests
+youtube-transcript-api
