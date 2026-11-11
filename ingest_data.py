@@ -1,6 +1,7 @@
 import pandas as pd
 from youtube_transcript_api import YouTubeTranscriptApi
 
+
 def build_dataset_from_bulk(csv_path="/home/sanju/Desktop/SPONSERBLOCK/filtered_sponsors(1).csv", max_videos=50, output_filename="train_dataset.csv"):
     print(f"Loading raw metadata from {csv_path}...")
     
@@ -35,7 +36,7 @@ def build_dataset_from_bulk(csv_path="/home/sanju/Desktop/SPONSERBLOCK/filtered_
         try:
             ytt_api = YouTubeTranscriptApi()
             transcript = ytt_api.fetch(vid).to_raw_data()
-        except Exception:
+        except Exception:  # noqa: BLE001, S112
             # Skip videos with disabled or unavailable transcripts
             continue
             
